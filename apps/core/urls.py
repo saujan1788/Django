@@ -1,7 +1,8 @@
 from django.urls import path
 
-from apps.core.views import HomePageView
+from apps.core import views
 
 urlpatterns = [
-    path('', HomePageView.as_view(), name='home'),
+    path('', views.HomePageView.as_view(), name='home'),
+    path('subnet/', views.SubnetView.as_view(), name='subnet'),
 ]

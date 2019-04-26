@@ -1,23 +1,19 @@
 
-from django.views.generic import TemplateView
-from django.shortcuts import render
-from django.http import HttpResponse
-from .subnet import user_form
+from django.views import generic
+
+from apps.core.forms import SubnetForm
 
 
-
-
-class HomePageView(TemplateView):
+class HomePageView(generic.TemplateView):
     template_name = "home.html"
-    context_object_name = 'home'
 
-    def user_input(request):
-        if request.method == 'POST':
-            form = user_form(request.POST)
-            if form.is_valid():
 
-                ip = form.cleaned_data['ip']
-                mask = form.cleaned_data['mask']
+class SubnetView(generic.FormView):
+    form_class = SubnetForm
+    success_url = "/subnet"
+    template_name = "subnet.html"
 
-        form = user_form()
-        return render(request,'home.html',{'form':form})
+    def form_valid(self, form):
+        result = form.calculate_subnet()
+        return self.render_to_response(self.get_context_data(result=result))
+
