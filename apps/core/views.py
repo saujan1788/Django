@@ -17,3 +17,13 @@ class SubnetView(generic.FormView):
         result = form.calculate_subnet()
         return self.render_to_response(self.get_context_data(result=result))
 
+
+class ConvertView(generic.FormView):
+    form_class = ConvertForm
+    success_url = "/convert"
+    template_name = "convert.html"
+
+    def form_valid(self, form):
+        result = form.convert_dec_to_bin()
+        return self.render_to_response(self.get_context_data(result=result))
+
