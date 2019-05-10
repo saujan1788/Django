@@ -1,7 +1,6 @@
-
 from django.views import generic
 
-from apps.core.forms import SubnetForm, ConvertForm
+from apps.core.forms import SubnetForm, ConvertForm, Valid_IPv6Form, ExpandForm
 
 
 class HomePageView(generic.TemplateView):
@@ -27,3 +26,21 @@ class ConvertView(generic.FormView):
         result = form.convert_dec_to_bin()
         return self.render_to_response(self.get_context_data(result=result))
 
+
+class Valid_IPv6View(generic.FormView):
+    form_class = Valid_IPv6Form
+    success_url = "/valid"
+    template_name = "valid.html"
+
+    def form_valid(self, form):
+        result = form.valid_ipv6()
+        return self.render_to_response(self.get_context_data(result=result))
+
+class ExpandView(generic.FormView):
+    form_class = ExpandForm
+    success_url = "/expand"
+    template_name = "expand.html"
+
+    def form_valid(self, form):
+        result = form.expand()
+        return self.render_to_response(self.get_context_data(result=result))
