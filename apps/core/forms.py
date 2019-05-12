@@ -2,6 +2,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 import ipaddress
+from django.utils import ipv6
 
 
 class SubnetForm(forms.Form):
@@ -155,6 +156,7 @@ class SubnetForm(forms.Form):
             'mask_bits': no_of_ones,
         }
 
+
 class ConvertForm(forms.Form):
     ip_address = forms.CharField(label='Enter an IP address', max_length=15)
 
@@ -185,58 +187,67 @@ class ConvertForm(forms.Form):
         return {
             'binary_IP': binary_ip,
         }
-class Valid_IPv6Form(forms.Form):
+
+
+class ValidIPv6Form(forms.Form):
     ip_address = forms.CharField(label='Enter an IP address', max_length=39)
+
     def valid_ipv6(self):
         ip_address = self.cleaned_data['ip_address']
+        addr = None
+        ip = None
         try:
-            addr = ipaddress.IPv6Address(ip_address)
+            ip = ipaddress.IPv6Address(ip_address)
+
+            if ip.is_multicast:
+                addr = 'an IPv6 multicast address'
+            if ip.is_private:
+                addr = 'an IPv6 private address'
+            if ip.is_global:
+                addr = 'an IPv6 global address'
+            if ip.is_link_local:
+                addr = 'an IPv6 link-local address'
+            if ip.is_site_local:
+                addr = 'an IPv6 site-local address'
+            if ip.is_reserved:
+                addr = 'an IPv6 reserved address'
+            if ip.is_loopback:
+                addr = 'an IPv6 loopback address'
+            if ip.ipv4_mapped:
+                addr = 'an IPv6 mapped IPv4 address'
+            if ip.sixtofour:
+                addr = 'an IPv6 RFC 3056 address'
+            if ip.teredo:
+                addr = 'an IPv6 RFC 4380 address'
+
         except ipaddress.AddressValueError:
-            print(ip_address, 'is not a valid IPv6 address')
-        else:
-            if addr.is_multicast:
-                print(ip_address, 'is an IPv6 multicast address')
-            if addr.is_private:
-                print(ip_address, 'is an IPv6 private address')
-            if addr.is_global:
-                print(ip_address, 'is an IPv6 global address')
-            if addr.is_link_local:
-                print(ip_address, 'is an IPv6 link-local address')
-            if addr.is_site_local:
-                print(ip_address, 'is an IPv6 site-local address')
-            if addr.is_reserved:
-                print(ip_address, 'is an IPv6 reserved address')
-            if addr.is_loopback:
-                print(ip_address, 'is an IPv6 loopback address')
-            if addr.ipv4_mapped:
-                print(ip_address, 'is an IPv6 mapped IPv4 address')
-            if addr.sixtofour:
-                print(ip_address, 'is an IPv6 RFC 3056 address')
-            if addr.teredo:
-                print(ip_address, 'is an IPv6 RFC 4380 address')
+            addr = 'not a valid IPv6 address'
 
         return {
-            'addr':addr,
-            }
+            'ip': ip,
+            'addr': addr
+        }
+
 
 class ExpandForm(forms.Form):
     ip_address = forms.CharField(label='Enter the IP to be expanded', max_length=39)
-    #Ipv6 address expander
-    def expand_ipv6():
+    # Ipv6 address expander
+
+    def expand_ipv6(self):
         ip_address = self.cleaned_data['ip_address']
+
         try:
-            addr = ip_address.IPv6Address(ipv6)
-            addr = ip_address.ip_address(ipv6)
-            print(addr.exploded)
+            ip = ipaddress.IPv6Address(ip_address)
+            addr = ipaddress.ip_address(ip)
 
-        except ipaddress.AddressValueError:
-            print(' It is not a valid IPv6 address')
-
-        return {
-            'expand_addr':expand_addr,
+            return {
+                'ip': ip_address,
+                'expand_addr': addr.exploded,
             }
 
+        except ipaddress.AddressValueError:
+            return {
+                'ip': ip_address,
+                'error': ' It is not a valid IPv6 address',
 
-
-
-#(::abc:7def)
+            }

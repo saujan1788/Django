@@ -15,34 +15,43 @@
           <hr class="star-dark mb-5">
 
 
-            {% if result %}
-            <h6>The expanded address is: {{result.expand_addr}}</h6>
+          {% if result %}
+            <h6>IP: {{result.ip}}</h6>
+            {% if result.expand_addr %}
+              <h6>The expanded address is: {{result.expand_addr}}</h6>
+            {% endif %}
+
+            {% if result.error %}
+              <h6 class="text-danger">Error : {{result.error}}</h6>
+            {% endif %}
+
 
 
              <a class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss mt-4" href="{% url 'expand' %}">
             <i class="fa fa-close"></i>
             Go Back</a>
-            {% else %}
+          {% else %}
             <form method="post" novalidate>
-            {% csrf_token %}
+              {% csrf_token %}
 
-            {% for hidden_field in form.hidden_fields %}
-            {{ hidden_field }}
-            {% endfor %}
+              {% for hidden_field in form.hidden_fields %}
+                {{ hidden_field }}
+              {% endfor %}
 
-            {% for field in form.visible_fields %}
-            <div class="form-group">
-              {{ field.label_tag }}
-              {{ field }}
-              {% if field.help_text %}
-              <small class="form-text text-muted">{{ field.help_text }}</small>
-              {% endif %}
-            </div>
-            {% endfor %}
+              {% for field in form.visible_fields %}
+                <div class="form-group">
+                  {{ field.label_tag }}
+                  {{ field }}
+
+                  {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                  {% endif %}
+                </div>
+              {% endfor %}
 
             <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
-            {% endif %}
+            </form>
+          {% endif %}
 
         </div>
       </div>

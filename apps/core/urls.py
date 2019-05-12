@@ -20,7 +20,7 @@ urlpatterns = [
     ),
     path(
         'valid/',
-        views.Valid_IPv6View.as_view(),
+        views.ValidIPv6View.as_view(),
         name='valid',
     ),
 
