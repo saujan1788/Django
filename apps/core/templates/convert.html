@@ -14,15 +14,22 @@
           <hr class="star-dark mb-5">
           <img class="img-fluid mb-5" src="{% static 'img/portfolio/ipConv.png' %}" alt="IPConverter">
 
-            {% if result %}
-            <h6>Binary IP is: {{result.binary_IP}}</h6>
+          {% if result %}
+          <h6>Binary IP is: {{result.binary_IP}}</h6>
 
 
-             <a class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss mt-4" href="{% url 'convert' %}">
+          <a class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss mt-4" href="{% url 'convert' %}">
             <i class="fa fa-close"></i>
             Go Back</a>
-            {% else %}
-            <form method="post" novalidate>
+          {% else %}
+          {% if form.errors %}
+          {% for error in form.non_field_errors %}
+          <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+          </div>
+          {% endfor %}
+          {% endif %}
+          <form method="post" novalidate>
             {% csrf_token %}
 
             {% for hidden_field in form.hidden_fields %}
@@ -36,12 +43,14 @@
               {% if field.help_text %}
               <small class="form-text text-muted">{{ field.help_text }}</small>
               {% endif %}
+              <strong>{{ field.errors }}</strong>
+
             </div>
             {% endfor %}
 
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>
-            {% endif %}
+          {% endif %}
 
         </div>
       </div>
