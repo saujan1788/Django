@@ -224,7 +224,7 @@ class ValidIPv6Form(forms.Form):
             addr = 'not a valid IPv6 address'
 
         return {
-            'ip': ip,
+            'ip': ip_address,
             'addr': addr
         }
 
