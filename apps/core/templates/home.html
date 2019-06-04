@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load mac_address %}
-{% load general_info %}
 {% block content %}
 
 <!-- Navigation -->
@@ -75,7 +73,7 @@
         </a>
       </div>
       <div class="col-md-6 col-lg-4">
-        <a class="portfolio-item d-block mx-auto" href="#portfolio-modal-4">
+        <a class="portfolio d-block mx-auto" href="{% url 'general-info' %}">
           <div class="portfolio-item-caption d-flex position-absolute h-100 w-100">
             <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">
               <i class="fas fa-search-plus fa-3x"></i>
@@ -85,7 +83,7 @@
         </a>
       </div>
       <div class="col-md-6 col-lg-4">
-        <a class="portfolio-item d-block mx-auto" href="#portfolio-modal-5">
+        <a class="portfolio d-block mx-auto" href="{% url 'mac-address' %}">
           <div class="portfolio-item-caption d-flex position-absolute h-100 w-100">
             <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">
               <i class="fas fa-search-plus fa-3x"></i>
@@ -289,54 +287,4 @@
   </div>
 </div>
 
-<!-- Portfolio Modal 3 -->
-
-<!-- Portfolio Modal 4 -->
-<div class="portfolio-modal mfp-hide" id="portfolio-modal-4">
-  <div class="portfolio-modal-dialog bg-white">
-    <a class="close-button d-none d-md-block portfolio-modal-dismiss" href="#">
-      <i class="fa fa-3x fa-times"></i>
-    </a>
-    <div class="container text-center">
-      <div class="row">
-        <div class="col-lg-8 mx-auto">
-          <h2 class="text-secondary text-uppercase mb-0">General Info</h2>
-          <hr class="star-dark mb-5">
-          <img class="img-fluid mb-5" src="{% static 'img/portfolio/general.png' %}" alt="">
-          {% get_general_info as info %}
-          <p class="mb-5">Host Name : {{info.host_name}}</p>
-          <p class="mb-5">IP address: {{info.ip_address}}</p>
-          <a class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss" href="#">
-            <i class="fa fa-close"></i>
-            Close Project</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Portfolio Modal 5 -->
-<div class="portfolio-modal mfp-hide" id="portfolio-modal-5">
-  <div class="portfolio-modal-dialog bg-white">
-    <a class="close-button d-none d-md-block portfolio-modal-dismiss" href="#">
-      <i class="fa fa-3x fa-times"></i>
-    </a>
-    <div class="container text-center">
-      <div class="row">
-        <div class="col-lg-8 mx-auto">
-          <h2 class="text-secondary text-uppercase mb-0">Mac Address</h2>
-          <hr class="star-dark mb-5">
-          <img class="img-fluid mb-5" src="{% static 'img/portfolio/macAd.png' %}" alt="MacAdress">
-          <p class="mb-5">Mac Address of Your Device :</p>
-          <p class="mb-5">{% get_mac_address %}</p>
-          <a class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss" href="#">
-            <i class="fa fa-close"></i>
-            Close Project</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Portfolio Modal 6 -->
 {% endblock %}

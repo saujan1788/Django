@@ -1,6 +1,9 @@
+import re
+import socket
+import uuid
 from django.views import generic
 
-from apps.core.forms import SubnetForm, ConvertForm,ExpandForm, ValidIPv6Form
+from apps.core.forms import SubnetForm, ConvertForm, ExpandForm, ValidIPv6Form
 
 
 class HomePageView(generic.TemplateView):
@@ -45,3 +48,28 @@ class ExpandView(generic.FormView):
     def form_valid(self, form):
         result = form.expand_ipv6()
         return self.render_to_response(self.get_context_data(result=result))
+
+
+class GeneralInfoView(generic.TemplateView):
+    template_name = "general_info.html"
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        host_name = socket.gethostname()
+        # gets the ip address by taking hostname as an argument
+        ip_address = socket.gethostbyname('localhost')
+        context['host_name'] = host_name
+        context['ip_address'] = ip_address
+        return context
+
+
+class MacAddressView(generic.TemplateView):
+    template_name = "mac_address.html"
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        mac_address = ':'.join(re.findall('..', '%012x' % uuid.getnode()))
+        context['mac_address'] = mac_address
+        return context

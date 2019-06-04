@@ -19,6 +19,16 @@ urlpatterns = [
         name='convert',
     ),
     path(
+        'info/',
+        views.GeneralInfoView.as_view(),
+        name='general-info',
+    ),
+    path(
+        'mac/',
+        views.MacAddressView.as_view(),
+        name='mac-address',
+    ),
+    path(
         'valid/',
         views.ValidIPv6View.as_view(),
         name='valid',
